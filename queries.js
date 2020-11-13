@@ -1,3 +1,5 @@
+const { query } = require('express')
+
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: 'me',
@@ -43,7 +45,7 @@ const getStudentByID = (req, res) => {
 //GET grades/:studentId - returns all grades for a given student by student id-Peter
 const getGradeByID = (req, res) => {
     const id = parseInt(req.params.id)
-    pool.query('SELECT * FROM grade WHERE id = $1', [id], (error, results) => {
+    pool.query('SELECT * FROM grades WHERE student_id = $1', [id], (error, results) => {
         if(error){
             throw error
         }
@@ -53,6 +55,15 @@ const getGradeByID = (req, res) => {
 
 
 //POST grade - records a new grade, returns success status in JSON response and stores the new grade in the database
+const postGrade = (req, res) => {
+    const body = req.body
+    pool.query('INSERT INTO grades (student_id, grade) VALUES ($1, $2)', [body.id, body.grade], (error, results) => {
+        if(error){
+            throw error
+        }
+        res.status(200).send(`student ${body.id}, grade ${body.grade} added successfully`)
+    })
+}
 
 //POST register - creates a new user, returns success status in JSON response and stores the new user in the database
 const registerStudent = (req, res) => {
@@ -69,5 +80,6 @@ module.exports = {
     getStudents,
     getStudentByID,
     getGradeByID,
-    registerStudent
+    registerStudent,
+    postGrade
 }
