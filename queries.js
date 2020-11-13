@@ -55,9 +55,19 @@ const getGradeByID = (req, res) => {
 //POST grade - records a new grade, returns success status in JSON response and stores the new grade in the database
 
 //POST register - creates a new user, returns success status in JSON response and stores the new user in the database
+const registerStudent = (req, res) => {
+    const name = req.body.name
+    pool.query('INSERT INTO students (name) VALUES ($1)', [name], (error, results) => {
+        if(error){
+            throw error
+        }
+        res.status(200).send(`${name} added successfully`)
+    } )
+}
 
 module.exports = {
     getStudents,
     getStudentByID,
-    getGradeByID
+    getGradeByID,
+    registerStudent
 }
