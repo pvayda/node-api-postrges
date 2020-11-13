@@ -9,9 +9,9 @@ const pool = new Pool({
 //GET student - returns a list of all students - Caden
 const getStudents = (req, res) => {
     if(req.query.search){
-        const search = req.query.search
+        const name = req.query.search
     
-        pool.query('SELECT * FROM student WHERE name = $1', [search], (error, results) => {
+        pool.query('SELECT * FROM student WHERE name = $1', [name], (error, results) => {
             if (error) {
             throw error
         } 
